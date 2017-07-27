@@ -21,9 +21,7 @@ foodieApp.controller('restaurantController',function($scope,$routeParams,$http) 
 	$scope.ingredients = [];
 	$scope.restaurantId = $routeParams.id;
 
-
-	var ingredients = [{Sugary Foods, Soda, Sweets, Desserts, Fruit Juice, White Rice, Bread, Mayonnaise, Meat}]
-
+	$scope.diabetic_food = ['sugar', 'soda','sweet', 'juice', 'rice', 'bread', 'mayonnaise', 'meat'];
 
 	var restaurants = [{
 		name: 'Farzi Cafe',
@@ -146,12 +144,22 @@ $scope.getIngredients = function(url) {
 				.then(function (response) {
 	var ingredients = response.data.outputs[0].data.concepts;
 	for (var i =0;i < ingredients.length;i++) {
-	$scope.ingredients.push(ingredients[i].name);
-	}
+		if(ingredients[i].value>0.75)
+		{ $scope.ingredients.push(ingredients[i].name); }
 
+	}
+	for(j=0;j <$scope.ingredients.length;j++)
+{  var a=$scope.diabetic_food.indexOf($scope.ingredients[j]);
+	// console.log(a);
+ if(a>=0)
+	{
+		$scope.message='This food is harmful for diabetic person';
+		break;
+	}
+}
 //}
 			// $('.ingredients').html(list);
-			console.log(list)
+			// console.log(list)
 			}, function (xhr) {
 				console.log(xhr);
 			})
